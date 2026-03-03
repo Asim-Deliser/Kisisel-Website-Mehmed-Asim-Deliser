@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mehmed Asım Deliser | Harita Mühendisi & CBS Uzmanı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --border: #ffffff;
+      --accent: #cc0000;
+      --accent2: #ff4444;
+      --accent3: #ff8c8c;
+      --white: #3a1015;
+      --text: #3a1015;
+      --muted: #a07070;
+    }
+    html, body { height: 100%; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* Subtle red grid */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(204,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(204,0,0,0.04) 1px, transparent 1px);
+      background-size: 40px 40px; z-index: 0; pointer-events: none;
+    }
+
+    /* Glowing orbs */
+    .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+    .orb-1 { width: 600px; height: 600px; top: -200px; right: -150px; background: radial-gradient(circle, rgba(204,0,0,0.09) 0%, transparent 65%); animation: orbFloat1 10s ease-in-out infinite; }
+    .orb-2 { width: 400px; height: 400px; bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(180,0,0,0.06) 0%, transparent 65%); animation: orbFloat2 13s ease-in-out infinite; }
+    @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,30px)} }
+    @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 3rem;
+      background: rgba(10,2,3,0.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 62px;
+    }
+    .nav-left { display: flex; align-items: center; gap: 1rem; }
+
+    /* Sivasspor Logo SVG inline */
+    .sivasspor-logo {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 6px rgba(204,0,0,0.5));
+    }
+
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.06em; text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transition: transform 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1; min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; max-width: 1200px; margin: 0 auto;
+      padding: 5rem 3rem 3rem; gap: 3rem;
+    }
+
+    .hero-eyebrow { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.8rem; animation: fadeUp 0.7s 0.1s both; }
+    .eyebrow-pill { background: rgba(204,0,0,0.15); border: 1px solid rgba(204,0,0,0.4); color: var(--accent2); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+    .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: blinkDot 2s ease-in-out infinite; }
+    @keyframes blinkDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.5)} }
+
+    .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(3rem,5.5vw,5rem); font-weight: 900; line-height: 1.0; margin-bottom: 0.5rem; animation: fadeUp 0.7s 0.2s both; }
+    .hero-name .first { display: block; color: var(--white); }
+    .hero-name .last { display: block; color: var(--accent); }
+    .hero-role { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1rem,2vw,1.25rem); color: var(--muted); margin-bottom: 2rem; animation: fadeUp 0.7s 0.3s both; }
+    .hero-desc { color: var(--muted); font-size: 1rem; line-height: 1.75; max-width: 440px; margin-bottom: 2.5rem; animation: fadeUp 0.7s 0.4s both; }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.5s both; }
+    .btn { padding: 0.75rem 1.8rem; border-radius: 4px; font-size: 0.9rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: all 0.22s; display: inline-block; font-family: 'DM Sans', sans-serif; }
+    .btn-primary { background: var(--accent); color: var(--white); border: 1px solid var(--accent); }
+    .btn-primary:hover { background: #ee1111; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(204,0,0,0.35); }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-2px); }
+
+    .hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); animation: fadeUp 0.7s 0.6s both; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--accent); display: block; }
+    .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* PANEL */
+    .hero-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; animation: fadeUp 0.7s 0.3s both; }
+    .hero-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), #ff6666); }
+    .hero-panel::after { content: ''; position: absolute; bottom: 0; right: 0; width: 140px; height: 140px; background: radial-gradient(circle at bottom right, rgba(204,0,0,0.07), transparent 70%); }
+
+    /* Sivasspor badge in panel corner */
+    .panel-badge-logo {
+      position: absolute; top: 1.2rem; right: 1.5rem;
+      width: 32px; height: 32px; opacity: 0.25;
+    }
+
+    .panel-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, #880000 100%); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--white); margin-bottom: 1.2rem; border: 2px solid rgba(204,0,0,0.4); }
+    .panel-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--white); }
+    .panel-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--accent2); margin-bottom: 1.5rem; }
+    .panel-divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
+
+    .info-row { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.55rem 0; font-size: 0.84rem; border-bottom: 1px solid rgba(58,16,21,0.8); }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-icon { color: var(--accent); min-width: 16px; margin-top: 1px; font-size: 0.85rem; }
+    .info-label { color: var(--muted); min-width: 70px; flex-shrink: 0; }
+    .info-value { color: var(--text); word-break: break-all; }
+    .blurred { filter: blur(4px); transition: filter 0.3s; user-select: none; }
+    .blurred:hover { filter: blur(0px); }
+
+    .panel-links { display: flex; gap: 0.6rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .panel-link { padding: 0.35rem 0.9rem; border-radius: 3px; font-size: 0.75rem; font-weight: 500; border: 1px solid var(--border); color: var(--muted); text-decoration: none; transition: all 0.2s; }
+    .panel-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    .scroll-hint { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; animation: fadeUp 1s 1.2s both; }
+    .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%{transform:scaleY(0);transform-origin:top;opacity:0} 40%{transform:scaleY(1);transform-origin:top;opacity:1} 60%{transform:scaleY(1);transform-origin:bottom;opacity:1} 100%{transform:scaleY(0);transform-origin:bottom;opacity:0} }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 1.8rem 3rem; text-align: center; color: var(--muted); font-size: 0.82rem; }
+    footer a { color: var(--accent2); text-decoration: none; }
+
+    @media (max-width: 860px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { gap: 1rem; }
+      .hero { grid-template-columns: 1fr; padding: 5rem 1.5rem 4rem; min-height: auto; gap: 2rem; }
+      .hero-panel { order: -1; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <nav>
+  <div class="nav-left">
+    <img src="images/sivasspor.png" alt="Sivasspor Logo" class="sivasspor-logo">
+    <a class="nav-logo" href="index.html">MAD <span>·</span></a>
+  </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Ana Sayfa</a></li>
+      <li><a href="hakkimda.html">Hakkımda</a></li>
+      <li><a href="hobilerim.html">Hobilerim</a></li>
+      <li><a href="iletisim.html">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-pill">📍 Ankara, Türkiye</span>
+        <span class="eyebrow-dot"></span>
+        <span style="font-size:0.75rem;color:var(--muted);letter-spacing:0.06em;">Aktif</span>
+      </div>
+      <h1 class="hero-name">
+        <span class="first">Mehmed Asım</span>
+        <span class="last">Deliser</span>
+      </h1>
+      <div class="hero-role">Harita Mühendisi & CBS Uzmanı</div>
+      <p class="hero-desc">
+        <strong>T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı</strong>, CBS Genel Müdürlüğü'nde CBS Uzmanı olarak görev yapmaktayım. Arazi toplulaştırma, kadastro ve coğrafi bilgi sistemleri alanlarında 5+ yıl deneyim.
+      </p>
+      <div class="hero-cta">
+        <a href="hakkimda.html" class="btn btn-primary">Hakkımda →</a>
+        <a href="iletisim.html" class="btn btn-outline">İletişim</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="stat-num">5+</span><span class="stat-label">Yıl Deneyim</span></div>
+        <div><span class="stat-num">4</span><span class="stat-label">Büyük Proje</span></div>
+        <div><span class="stat-num">İHA-1</span><span class="stat-label">Ehliyet</span></div>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <!-- Faint logo watermark -->
+      <svg class="panel-badge-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="#cc0000"/>
+        <polygon points="50,14 56,35 78,35 61,48 67,69 50,57 33,69 39,48 22,35 44,35" fill="#ffffff"/>
+      </svg>
+
+      <div class="panel-avatar">MAD</div>
+      <div class="panel-name">Mehmed Asım Deliser</div>
+      <div class="panel-badge">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:0 0 6px var(--accent);"></span>
+        CBS Uzmanı · Sözleşmeli Harita Mühendisi
+      </div>
+      <div class="panel-divider"></div>
+      <div class="info-row"><span class="info-icon">🏢</span><span class="info-label">Kurum</span><span class="info-value">T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı</span></div>
+      <div class="info-row"><span class="info-icon">🏛️</span><span class="info-label">Birim</span><span class="info-value">CBS Genel Müdürlüğü</span></div>
+      <div class="info-row"><span class="info-icon">📍</span><span class="info-label">Konum</span><span class="info-value">Ankara, Türkiye</span></div>
+      <div class="info-row"><span class="info-icon">📞</span><span class="info-label">Telefon</span><span class="info-value blurred"> 0111 111 11 11</span></div>
+      <div class="info-row"><span class="info-icon">📧</span><span class="info-label">E-Posta</span><span class="info-value">mehmedasim.deliser@csb.gov.tr</span></div>
+      <div class="info-row"><span class="info-icon">🎓</span><span class="info-label">Y. Lisans</span><span class="info-value">Sivas Cumhuriyet Üni. (devam)</span></div>
+      <div class="info-row"><span class="info-icon">🌐</span><span class="info-label">Dil</span><span class="info-value">Türkçe (Ana) · İngilizce (A2)</span></div>
+      <div class="panel-links">
+        <a href="hakkimda.html" class="panel-link">Deneyim</a>
+        <a href="hobilerim.html" class="panel-link">Haritam</a>
+        <a href="iletisim.html" class="panel-link">İletişim</a>
+        <a href="https://linkedin.com/in/mehmed-asım-deliser" target="_blank" class="panel-link">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+  </div>
+
+  <footer>
+    <p>© 2025 Mehmed Asım Deliser · <a href="https://linkedin.com/in/mehmed-asım-deliser" target="_blank">LinkedIn</a> · <a href="mailto:mehmedasim.deliser@csb.gov.tr">E-posta</a></p>
+  </footer>
+</body>
+</html>

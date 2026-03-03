@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hobilerim | Mehmed Asım Deliser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@9.2.4/ol.css" />
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --bg: #f5e8e8;
+      --surface: #f5e8e8;
+      --border: #f5e8e8;
+      --accent: #cc0000;
+      --accent2: #ff4444;
+      --accent3: #ff8c8c;
+      --gold: #ffc458;
+      --edu-c: #58a6ff;
+      --white: #3a1015;
+      --text: #3a1015;
+      --muted: #a07070;
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(204,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(204,0,0,0.04) 1px,transparent 1px); background-size:40px 40px; z-index:0; pointer-events:none; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 3rem; background:rgba(10,2,3,0.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); height:62px; }
+    .nav-left { display:flex; align-items:center; gap:1rem; }
+    .sivasspor-logo { width:36px; height:36px; flex-shrink:0; filter:drop-shadow(0 0 6px rgba(204,0,0,0.5)); }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--white); letter-spacing:0.05em; text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px; background:var(--accent); transform:scaleX(0); transition:transform 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform:scaleX(1); }
+
+    .page-header { position:relative; z-index:1; padding:7rem 3rem 2.5rem; max-width:1100px; margin:0 auto; animation:fadeDown 0.7s ease; }
+    .section-label { color:var(--accent2); font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; color:var(--white); }
+    .page-header p { color:var(--muted); margin-top:0.7rem; max-width:500px; line-height:1.7; }
+
+    /* Hobi cards */
+    .hobi-grid { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 3rem 3.5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.4rem; }
+    .hobi-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.6rem; cursor:default; position:relative; overflow:hidden; opacity:0; transform:translateY(28px); transition:opacity 0.55s ease, transform 0.55s ease, border-color 0.3s, box-shadow 0.3s; }
+    .hobi-card.vis { opacity:1; transform:translateY(0); }
+    .hobi-card:hover { border-color:var(--accent); box-shadow:0 8px 28px rgba(204,0,0,0.12); transform:translateY(-4px) !important; }
+    .hobi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transform:scaleX(0); transition:transform 0.3s; transform-origin:left; }
+    .hobi-card:hover::before { transform:scaleX(1); }
+    .hobi-emoji { font-size:2.2rem; margin-bottom:0.9rem; display:block; animation:pulse 3s ease-in-out infinite; }
+    .hobi-card:nth-child(2) .hobi-emoji { animation-delay:0.6s; }
+    .hobi-card:nth-child(3) .hobi-emoji { animation-delay:1.2s; }
+    .hobi-card:nth-child(4) .hobi-emoji { animation-delay:1.8s; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+    .hobi-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; margin-bottom:0.45rem; color:var(--white); }
+    .hobi-desc { color:var(--muted); font-size:0.85rem; line-height:1.6; }
+
+    /* Map section */
+    .map-section { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 3rem 5rem; }
+    .map-header { margin-bottom:1.5rem; display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .map-header h2 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--white); }
+    .map-legend { display:flex; gap:1.2rem; font-size:0.8rem; color:var(--muted); align-items:center; flex-wrap:wrap; }
+    .leg { display:flex; align-items:center; gap:0.4rem; }
+    .leg-dot { width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
+
+    #map { width:100%; height:500px; border-radius:10px; border:1px solid var(--border); overflow:hidden; }
+
+    /* Popup */
+    .ol-popup { position:absolute; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; min-width:200px; max-width:260px; pointer-events:auto; box-shadow:0 8px 30px rgba(0,0,0,0.6); font-family:'DM Sans',sans-serif; }
+    .ol-popup::after { content:''; position:absolute; bottom:-7px; left:50%; width:12px; height:12px; background:var(--surface); border-right:1px solid var(--border); border-bottom:1px solid var(--border); transform:translateX(-50%) rotate(45deg); }
+    .popup-close { position:absolute; top:8px; right:10px; font-size:1.1rem; color:var(--muted); cursor:pointer; background:none; border:none; line-height:1; transition:color 0.2s; }
+    .popup-close:hover { color:var(--white); }
+    .popup-title { font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; margin-bottom:4px; margin-right:16px; color:var(--white); }
+    .popup-tag { display:inline-block; font-size:0.68rem; padding:2px 7px; border-radius:2px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.08em; }
+    .tag-work { background:rgba(204,0,0,0.15); color:var(--accent2); border:1px solid rgba(204,0,0,0.35); }
+    .tag-edu  { background:rgba(88,166,255,0.15); color:var(--edu-c); border:1px solid rgba(88,166,255,0.3); }
+    .tag-life { background:rgba(255,196,88,0.15); color:var(--gold); border:1px solid rgba(255,196,88,0.3); }
+    .popup-desc { font-size:0.8rem; color:var(--muted); line-height:1.5; }
+
+    /* Layer buttons */
+    .layer-controls { display:flex; gap:0.7rem; margin-top:1rem; flex-wrap:wrap; }
+    .layer-btn { padding:0.4rem 1rem; border-radius:4px; font-size:0.82rem; font-weight:500; cursor:pointer; border:1px solid var(--border); background:var(--surface); color:var(--muted); transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+    .layer-btn.on-work { border-color:var(--accent); color:var(--accent2); background:rgba(204,0,0,0.08); }
+    .layer-btn.on-edu  { border-color:var(--edu-c); color:var(--edu-c); background:rgba(88,166,255,0.08); }
+    .layer-btn.on-life { border-color:var(--gold); color:var(--gold); background:rgba(255,196,88,0.08); }
+
+    #coords-bar { margin-top:0.7rem; font-size:0.78rem; color:var(--muted); min-height:1.2em; letter-spacing:0.04em; }
+
+    /* OL overrides */
+    .ol-zoom { top:0.7rem !important; left:0.7rem !important; }
+    .ol-zoom button { background:var(--surface) !important; color:var(--white) !important; border:1px solid var(--border) !important; font-size:1.1rem !important; }
+    .ol-zoom button:hover { background:var(--border) !important; }
+    .ol-attribution { background:rgba(10,2,3,0.78) !important; color:var(--muted) !important; font-size:0.7rem !important; }
+    .ol-attribution a { color:var(--accent3) !important; }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+    footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:1.8rem 3rem; text-align:center; color:var(--muted); font-size:0.82rem; }
+    footer a { color:var(--accent2); text-decoration:none; }
+    @media(max-width:768px) { nav{padding:0 1.5rem;} .nav-links{gap:1rem;} .page-header,.hobi-grid,.map-section{padding-left:1.5rem;padding-right:1.5rem;} #map{height:380px;} }
+  </style>
+</head>
+<body>
+  <nav>
+  <div class="nav-left">
+    <img src="images/sivasspor.png" alt="Sivasspor Logo" class="sivasspor-logo">
+    <a class="nav-logo" href="index.html">MAD <span>·</span></a>
+  </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Ana Sayfa</a></li>
+      <li><a href="hakkimda.html">Hakkımda</a></li>
+      <li><a href="hobilerim.html" class="active">Hobilerim</a></li>
+      <li><a href="iletisim.html">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="section-label">Kişisel</div>
+    <h1>Hobilerim</h1>
+    <p>İlgi alanlarım ve kariyer ile yaşam haritam — tüm iş yerleri, eğitim ve yaşadığım şehirler.</p>
+  </div>
+
+  <div class="hobi-grid">
+    <div class="hobi-card"><span class="hobi-emoji">🚁</span><div class="hobi-title">İnsansız Hava Araçları</div><div class="hobi-desc">İHA-1 ehliyet sahibiyim. Drone uçuşu ve hava fotoğrafçılığı hem mesleğim hem tutkum.</div></div>
+    <div class="hobi-card"><span class="hobi-emoji">🗺️</span><div class="hobi-title">Kartografya & CBS</div><div class="hobi-desc">Coğrafi bilgi sistemleri ve harita yapımı. Açık kaynak araçlarla (QGIS, OpenLayers) projeler geliştiriyorum.</div></div>
+    <div class="hobi-card"><span class="hobi-emoji">🏕️</span><div class="hobi-title">Doğa & Arazi</div><div class="hobi-desc">Arazi çalışmaları ve Anadolu coğrafyasını keşfetmek en büyük keyiflerimden biri.</div></div>
+    <div class="hobi-card"><span class="hobi-emoji">📚</span><div class="hobi-title">Akademik Araştırma</div><div class="hobi-desc">Sivas Cumhuriyet Üniversitesi'nde yüksek lisans sürecim devam etmektedir.</div></div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-header">
+      <div>
+        <div class="section-label">Coğrafi</div>
+        <h2>Kariyer & Yaşam Haritam</h2>
+      </div>
+      <div class="map-legend">
+        <span class="leg"><span class="leg-dot" style="background:#cc0000"></span>İş Yeri</span>
+        <span class="leg"><span class="leg-dot" style="background:#58a6ff"></span>Eğitim</span>
+        <span class="leg"><span class="leg-dot" style="background:#ffc458"></span>Yaşam / Konum</span>
+      </div>
+    </div>
+
+    <div id="map">
+      <div id="popup" class="ol-popup" style="display:none;">
+        <button class="popup-close" id="popup-close">×</button>
+        <div id="popup-title" class="popup-title"></div>
+        <div id="popup-tag" class="popup-tag"></div>
+        <div id="popup-desc" class="popup-desc"></div>
+      </div>
+    </div>
+
+    <div class="layer-controls">
+      <button class="layer-btn on-work" id="btn-work" onclick="toggleLayer('work')">🔴 İş Yerleri</button>
+      <button class="layer-btn on-edu"  id="btn-edu"  onclick="toggleLayer('edu')">🔵 Eğitim</button>
+      <button class="layer-btn on-life" id="btn-life" onclick="toggleLayer('life')">🟡 Yaşam</button>
+    </div>
+    <div id="coords-bar">Haritaya tıklayın — koordinatları okuyun.</div>
+  </div>
+
+  <footer>
+    <p>© 2025 Mehmed Asım Deliser · <a href="index.html">Ana Sayfa</a> · <a href="iletisim.html">İletişim</a></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/ol@9.2.4/dist/ol.js"></script>
+  <script>
+    const points = [
+      // Work — current: CBS GM, Ankara
+      { lon:32.7517, lat:39.9116, type:'work', title:'T.C. ÇŞİDB', desc:'CBS Uzmanı  · 2025 – Halen · Ankara' },
+      // Work — Sivas
+      { lon:37.0179, lat:39.7377, type:'work', title:'NKD Mühendislik', desc:'Sivas 5. Kısım Arazi Toplulaştırma · Şantiye Şefliği · 2022–2024' },
+      { lon:37.0079, lat:39.7477, type:'work', title:'Körfez Haritacılık', desc:'Sivas 4. Kısım Arazi Toplulaştırma · Proje Müh. · 2021–2022' },
+      { lon:37.0279, lat:39.7477, type:'work', title:'GEOGIS Mühendislik', desc:'Sivas 3. Kısım Arazi Toplulaştırma · Proje Müh. · 2020–2021' },
+      // Education
+      { lon:39.7178, lat:41.0015, type:'edu', title:'Karadeniz Teknik Üniversitesi', desc:'Harita Mühendisliği Lisans · Mezuniyet 2019 · Trabzon' },
+      { lon:37.0180, lat:39.7550, type:'edu', title:'Sivas Cumhuriyet Üniversitesi', desc:'Harita Mühendisliği Y. Lisans · 2024 – Devam · Sivas' },
+      // Life
+      { lon:37.0180, lat:39.7500, type:'life', title:'Sivas', desc:'Doğduğum şehir · Uzun yıllar çalışma ve yaşam merkezi' },
+      { lon:32.8597, lat:39.9200, type:'life', title:'Ankara', desc:'Şu an yaşadığım şehir · 2025\'ten itibaren' },
+    ];
+
+    const colors = { work:'#cc0000', edu:'#58a6ff', life:'#ffc458' };
+    const tagLabels = { work:'İş Yeri', edu:'Eğitim', life:'Yaşam' };
+
+    const { Map, View, Feature } = ol;
+    const { Tile: TileLayer, Vector: VectorLayer } = ol.layer;
+    const { XYZ, Vector: VectorSource } = ol.source;
+    const { Point } = ol.geom;
+    const { Style, Circle: CircleStyle, Fill, Stroke } = ol.style;
+    const { fromLonLat } = ol.proj;
+    const Overlay = ol.Overlay;
+
+    // OSM standard tile layer (not dark — shows actual map)
+    const baseLayer = new TileLayer({
+      source: new XYZ({
+        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attributions: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      })
+    });
+
+    const sources = { work: new VectorSource(), edu: new VectorSource(), life: new VectorSource() };
+
+    points.forEach(p => {
+      const feat = new Feature({ geometry: new Point(fromLonLat([p.lon, p.lat])), data: p });
+      const isWork = p.type === 'work';
+      feat.setStyle(new Style({
+        image: new CircleStyle({
+          radius: isWork ? 11 : 9,
+          fill: new Fill({ color: colors[p.type] }),
+          stroke: new Stroke({ color: '#ffffff', width: isWork ? 3 : 2 })
+        })
+      }));
+      sources[p.type].addFeature(feat);
+    });
+
+    const layers = {
+      work: new VectorLayer({ source: sources.work, zIndex: 3 }),
+      edu:  new VectorLayer({ source: sources.edu,  zIndex: 3 }),
+      life: new VectorLayer({ source: sources.life, zIndex: 3 }),
+    };
+
+    const map = new Map({
+      target: 'map',
+      layers: [baseLayer, layers.work, layers.edu, layers.life],
+      view: new View({ center: fromLonLat([36.5, 39.9]), zoom: 6 })
+    });
+
+    // Popup
+    const popupEl = document.getElementById('popup');
+    const overlay = new Overlay({ element: popupEl, positioning: 'bottom-center', stopEvent: true, offset: [0, -14] });
+    map.addOverlay(overlay);
+
+    document.getElementById('popup-close').addEventListener('click', () => {
+      overlay.setPosition(undefined);
+      popupEl.style.display = 'none';
+    });
+
+    map.on('click', evt => {
+      let hit = false;
+      map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+        if (hit) return;
+        hit = true;
+        const d = feature.get('data');
+        document.getElementById('popup-title').textContent = d.title;
+        const tagEl = document.getElementById('popup-tag');
+        tagEl.textContent = tagLabels[d.type];
+        tagEl.className = 'popup-tag tag-' + d.type;
+        document.getElementById('popup-desc').textContent = d.desc;
+        overlay.setPosition(evt.coordinate);
+        popupEl.style.display = 'block';
+      });
+      if (!hit) { overlay.setPosition(undefined); popupEl.style.display = 'none'; }
+      const lonLat = ol.proj.toLonLat(evt.coordinate);
+      document.getElementById('coords-bar').textContent =
+        `Koordinat: Boylam ${lonLat[0].toFixed(5)}° · Enlem ${lonLat[1].toFixed(5)}°`;
+    });
+
+    map.on('pointermove', evt => {
+      map.getTargetElement().style.cursor = map.hasFeatureAtPixel(evt.pixel) ? 'pointer' : '';
+    });
+
+    const layerOn = { work:true, edu:true, life:true };
+    function toggleLayer(type) {
+      layerOn[type] = !layerOn[type];
+      layers[type].setVisible(layerOn[type]);
+      document.getElementById('btn-' + type).className = layerOn[type] ? 'layer-btn on-' + type : 'layer-btn';
+    }
+
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:0.12});
+    document.querySelectorAll('.hobi-card').forEach((el,i) => { el.style.transitionDelay = (i*0.1)+'s'; obs.observe(el); });
+  </script>
+</body>
+</html>

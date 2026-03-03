@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hakkımda | Mehmed Asım Deliser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --border: #ffffff;
+      --accent: #cc0000;
+      --accent2: #ff4444;
+      --accent3: #ff8c8c;
+      --white: #3a1015;
+      --text: #3a1015;
+      --muted: #a07070;
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(204,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(204,0,0,0.04) 1px,transparent 1px); background-size:40px 40px; z-index:0; pointer-events:none; }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 3rem; background:rgba(10,2,3,0.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); height:62px; }
+    .nav-left { display:flex; align-items:center; gap:1rem; }
+    .sivasspor-logo { width:36px; height:36px; flex-shrink:0; filter:drop-shadow(0 0 6px rgba(204,0,0,0.5)); }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--white); letter-spacing:0.05em; text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px; background:var(--accent); transform:scaleX(0); transition:transform 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform:scaleX(1); }
+
+    .page-hero { position:relative; z-index:1; padding:7rem 3rem 3rem; max-width:1100px; margin:0 auto; animation:fadeDown 0.7s ease; }
+    .section-label { color:var(--accent2); font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,4vw,3.2rem); font-weight:900; margin-bottom:0.8rem; color:var(--white); }
+    .page-hero h1 span { color:var(--accent); }
+    .page-hero p { color:var(--muted); max-width:520px; line-height:1.75; font-size:1rem; }
+
+    .content-grid { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:1rem 3rem 5rem; display:grid; grid-template-columns:3fr 2fr; gap:4rem; align-items:start; }
+
+    h2.section-h { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; margin-bottom:2rem; color:var(--white); }
+
+    /* Timeline */
+    .timeline { position:relative; margin-bottom:4rem; }
+    .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:1px; background:linear-gradient(to bottom, var(--accent), rgba(204,0,0,0.08)); }
+    .t-item { padding-left:1.8rem; padding-bottom:2.2rem; position:relative; opacity:0; transform:translateX(-18px); transition:opacity 0.55s ease, transform 0.55s ease; }
+    .t-item.vis { opacity:1; transform:translateX(0); }
+    .t-item::before { content:''; position:absolute; left:-4px; top:7px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 10px rgba(204,0,0,0.6); }
+    .t-item.current::before { animation:pulseDot 2s ease-in-out infinite; }
+    @keyframes pulseDot { 0%,100%{box-shadow:0 0 8px rgba(204,0,0,0.5)} 50%{box-shadow:0 0 20px rgba(204,0,0,1)} }
+    .t-date { color:var(--muted); font-size:0.78rem; letter-spacing:0.05em; margin-bottom:0.2rem; }
+    .t-company { font-size:0.72rem; color:var(--accent3); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.25rem; }
+    .t-role { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; margin-bottom:0.5rem; color:var(--white); }
+    .t-role .badge { display:inline-block; font-family:'DM Sans',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.15rem 0.5rem; border-radius:2px; margin-left:0.5rem; vertical-align:middle; }
+    .badge-now { background:rgba(204,0,0,0.2); border:1px solid rgba(204,0,0,0.5); color:var(--accent2); }
+    .t-desc { color:var(--muted); font-size:0.86rem; line-height:1.65; }
+
+    /* Skills */
+    .skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; }
+    .skill-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1rem; opacity:0; transform:translateY(12px); transition:opacity 0.5s, transform 0.5s, border-color 0.3s, box-shadow 0.3s; }
+    .skill-card.vis { opacity:1; transform:translateY(0); }
+    .skill-card:hover { border-color:var(--accent); box-shadow:0 0 16px rgba(204,0,0,0.15); }
+    .skill-icon { font-size:1.3rem; margin-bottom:0.4rem; }
+    .skill-name { font-size:0.82rem; font-weight:500; color:var(--text); }
+
+    /* Edu cards */
+    .edu-wrap { margin-bottom:3rem; }
+    .edu-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.3rem; margin-bottom:0.9rem; position:relative; overflow:hidden; opacity:0; transform:translateY(16px); transition:opacity 0.5s, transform 0.5s, border-color 0.3s; }
+    .edu-card.vis { opacity:1; transform:translateY(0); }
+    .edu-card:hover { border-color:var(--accent2); }
+    .edu-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transform:scaleX(0); transition:transform 0.3s; }
+    .edu-card:hover::after { transform:scaleX(1); }
+    .edu-year { color:var(--accent2); font-size:0.75rem; margin-bottom:0.2rem; }
+    .edu-school { font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; margin-bottom:0.15rem; color:var(--white); }
+    .edu-dept { color:var(--muted); font-size:0.82rem; }
+    .edu-degree { display:inline-block; margin-top:0.5rem; background:rgba(204,0,0,0.1); border:1px solid rgba(204,0,0,0.25); color:var(--accent3); font-size:0.68rem; letter-spacing:0.1em; padding:0.18rem 0.55rem; border-radius:2px; }
+
+    /* Sertifikalar */
+    .cert-wrap { margin-bottom:3rem; }
+    .cert-item { display:flex; align-items:center; gap:0.9rem; padding:0.75rem 1rem; background:var(--surface); border:1px solid var(--border); border-radius:7px; margin-bottom:0.6rem; font-size:0.83rem; opacity:0; transform:translateX(16px); transition:opacity 0.5s, transform 0.5s, border-color 0.2s; }
+    .cert-item.vis { opacity:1; transform:translateX(0); }
+    .cert-item:hover { border-color:var(--accent2); }
+    .cert-year { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--accent2); min-width:38px; }
+    .cert-name { color:var(--text); line-height:1.3; }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+    footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:1.8rem 3rem; text-align:center; color:var(--muted); font-size:0.82rem; }
+    footer a { color:var(--accent2); text-decoration:none; }
+
+    @media (max-width:860px) {
+      nav { padding:0 1.5rem; } .nav-links { gap:1rem; }
+      .page-hero, .content-grid { padding-left:1.5rem; padding-right:1.5rem; }
+      .content-grid { grid-template-columns:1fr; gap:2.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+  <div class="nav-left">
+    <img src="images/sivasspor.png" alt="Sivasspor Logo" class="sivasspor-logo">
+    <a class="nav-logo" href="index.html">MAD <span>·</span></a>
+  </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Ana Sayfa</a></li>
+      <li><a href="hakkimda.html" class="active">Hakkımda</a></li>
+      <li><a href="hobilerim.html">Hobilerim</a></li>
+      <li><a href="iletisim.html">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="section-label">Kariyer & Eğitim</div>
+    <h1>Hakkım<span>da</span></h1>
+    <p>Harita mühendisliği, CBS ve arazi toplulaştırma alanlarında edindiğim deneyimler. Beş yıllık sektör geçmişim, iki üniversite ve dört sertifika.</p>
+  </div>
+
+  <div class="content-grid">
+    <div>
+      <div class="section-label">İş Geçmişi</div>
+      <h2 class="section-h">Deneyim</h2>
+      <div class="timeline">
+
+        <div class="t-item current">
+          <div class="t-date">2025 – Halen</div>
+          <div class="t-company">T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı · Ankara</div>
+          <div class="t-role">CBS Uzmanı <span class="badge badge-now">Şu An</span></div>
+          <div class="t-desc">CBS Genel Müdürlüğü bünyesinde sözleşmeli CBS uzmanı olarak görev yapmaktayım. Kadastro süreçlerinde coğrafi bilgi sistemi uygulamaları ve veri yönetimi.</div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2022 – 2024</div>
+          <div class="t-company">NKD Mühendislik Turizm İnşaat Sanayi ve Ticaret A.Ş. · Sivas</div>
+          <div class="t-role">Harita Mühendisi – Şantiye Şefliği</div>
+          <div class="t-desc">Sivas 5. Kısım Arazi Toplulaştırma ve Tarla İçi Geliştirme Hizmetleri Projesi — hakediş ve iş programlarının yürütülmesi, saha imalatlarının takibi.</div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2021 – 2022</div>
+          <div class="t-company">Körfez Haritacılık ve Planlama Ltd. Şti. · Sivas</div>
+          <div class="t-role">Harita Mühendisi – Proje Mühendisi</div>
+          <div class="t-desc">Sivas 4. Kısım Arazi Toplulaştırma Projesi — dağıtım parselasyon işlemleri ve arazi imalatlarının takibi.</div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2020 – 2021</div>
+          <div class="t-company">GEOGIS Mühendislik Müşavirlik İnşaat ve Ticaret A.Ş. · Sivas</div>
+          <div class="t-role">Harita Mühendisi – Proje Mühendisi</div>
+          <div class="t-desc">Sivas 3. Kısım Arazi Toplulaştırma Projesi — proje tapu ve kadastro tescil işlemleri ve takibi.</div>
+        </div>
+      </div>
+
+      <div class="section-label">Yetkinlikler</div>
+      <h2 class="section-h">Beceriler & Araçlar</h2>
+      <div class="skills-grid">
+        <div class="skill-card"><div class="skill-icon">🗺️</div><div class="skill-name">ArcGIS</div></div>
+        <div class="skill-card"><div class="skill-icon">🌍</div><div class="skill-name">QGIS</div></div>
+        <div class="skill-card"><div class="skill-icon">📐</div><div class="skill-name">NetCAD</div></div>
+        <div class="skill-card"><div class="skill-icon">✏️</div><div class="skill-name">AutoCAD</div></div>
+        <div class="skill-card"><div class="skill-icon">💻</div><div class="skill-name">MS Office</div></div>
+        <div class="skill-card"><div class="skill-icon">🚁</div><div class="skill-name">İHA Pilotajı</div></div>
+        <div class="skill-card"><div class="skill-icon">⏱️</div><div class="skill-name">Zaman Yönetimi</div></div>
+        <div class="skill-card"><div class="skill-icon">🤝</div><div class="skill-name">Ekip Çalışması</div></div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="edu-wrap">
+        <div class="section-label">Akademi</div>
+        <h2 class="section-h">Eğitim</h2>
+        <div class="edu-card">
+          <div class="edu-year">2024 – Devam Ediyor</div>
+          <div class="edu-school">Sivas Cumhuriyet Üniversitesi</div>
+          <div class="edu-dept">Harita Mühendisliği</div>
+          <div class="edu-degree">Yüksek Lisans</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-year">Mezuniyet: 2019</div>
+          <div class="edu-school">Karadeniz Teknik Üniversitesi</div>
+          <div class="edu-dept">Harita Mühendisliği</div>
+          <div class="edu-degree">Lisans</div>
+        </div>
+      </div>
+
+      <div class="cert-wrap">
+        <div class="section-label">Belgeler</div>
+        <h2 class="section-h">Sertifikalar</h2>
+        <div class="cert-item"><div class="cert-year">2021</div><div class="cert-name">İnsansız Hava Aracı Ehliyeti (İHA-1)</div></div>
+        <div class="cert-item"><div class="cert-year">2021</div><div class="cert-name">SRC-4 Belgesi</div></div>
+        <div class="cert-item"><div class="cert-year">2022</div><div class="cert-name">AutoCAD İki Boyutlu Teknik Çizim</div></div>
+        <div class="cert-item"><div class="cert-year">2022</div><div class="cert-name">Arazi Toplulaştırma Projelendirme Eğitimi</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Mehmed Asım Deliser · <a href="https://linkedin.com/in/mehmed-asım-deliser" target="_blank">LinkedIn</a> · <a href="mailto:mehmedasim.deliser@csb.gov.tr">E-posta</a></p>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:0.12});
+    document.querySelectorAll('.t-item,.edu-card,.cert-item,.skill-card').forEach((el,i) => {
+      el.style.transitionDelay = (i * 0.07) + 's';
+      obs.observe(el);
+    });
+  </script>
+</body>
+</html>

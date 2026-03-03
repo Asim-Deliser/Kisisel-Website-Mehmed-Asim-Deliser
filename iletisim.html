@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İletişim | Mehmed Asım Deliser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --border: #ffffff;
+      --accent: #cc0000;
+      --accent2: #ff4444;
+      --accent3: #ff8c8c;
+      --white: #3a1015;
+      --text: #3a1015;
+      --muted: #a07070;
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(204,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(204,0,0,0.04) 1px,transparent 1px); background-size:40px 40px; z-index:0; pointer-events:none; }
+
+    .glow-orb { position:fixed; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(204,0,0,0.07) 0%,transparent 70%); top:5%; right:-120px; pointer-events:none; z-index:0; animation:orbFloat 8s ease-in-out infinite; }
+    @keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(40px) scale(1.05)} }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 3rem; background:rgba(10,2,3,0.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); height:62px; }
+    .nav-left { display:flex; align-items:center; gap:1rem; }
+    .sivasspor-logo { width:36px; height:36px; flex-shrink:0; filter:drop-shadow(0 0 6px rgba(204,0,0,0.5)); }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--white); letter-spacing:0.05em; text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; transition:color 0.2s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px; background:var(--accent); transform:scaleX(0); transition:transform 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform:scaleX(1); }
+
+    .main { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:7rem 3rem 5rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+
+    .contact-left { animation:fadeLeft 0.7s ease both; }
+    .section-label { color:var(--accent2); font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:0.5rem; }
+    h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:1rem; color:var(--white); }
+    .intro-text { color:var(--muted); line-height:1.75; margin-bottom:2.5rem; max-width:400px; }
+
+    .contact-items { display:flex; flex-direction:column; gap:0.9rem; }
+    .contact-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.2rem; background:var(--surface); border:1px solid var(--border); border-radius:8px; text-decoration:none; color:var(--text); transition:all 0.25s; opacity:0; transform:translateX(-20px); }
+    .contact-item.vis { opacity:1; transform:translateX(0); }
+    .contact-item:hover { border-color:var(--accent); transform:translateX(5px) !important; box-shadow:-3px 0 0 var(--accent); }
+
+    /* Highlighted current workplace */
+    .contact-item.highlight { border-color:rgba(204,0,0,0.4); background:rgba(204,0,0,0.05); }
+    .contact-item.highlight:hover { border-color:var(--accent2); }
+
+    .ci-icon { width:40px; height:40px; border-radius:7px; background:rgba(204,0,0,0.1); border:1px solid rgba(204,0,0,0.25); display:flex; align-items:center; justify-content:center; font-size:1.05rem; flex-shrink:0; }
+    .contact-item.highlight .ci-icon { background:rgba(204,0,0,0.2); border-color:rgba(204,0,0,0.45); }
+    .ci-label { font-size:0.72rem; color:var(--muted); margin-bottom:1px; }
+    .ci-value { font-size:0.88rem; font-weight:500; color:var(--text); }
+    .ci-sub { font-size:0.75rem; color:var(--muted); margin-top:1px; }
+
+    .badge-now { display:inline-block; font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:rgba(204,0,0,0.18); border:1px solid rgba(204,0,0,0.4); color:var(--accent2); padding:0.1rem 0.45rem; border-radius:2px; margin-left:0.4rem; vertical-align:middle; }
+
+    /* Blurred phone — hover to reveal */
+    .blurred { filter:blur(4px); transition:filter 0.3s; user-select:none; }
+    .blurred:hover { filter:blur(0px); }
+
+    .contact-right { animation:fadeRight 0.7s ease both; }
+    h2.section-h { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; margin-bottom:1.2rem; color:var(--white); }
+
+    .cert-section { margin-bottom:3rem; }
+    .cert-item { display:flex; align-items:center; gap:1rem; padding:0.85rem 1.1rem; background:var(--surface); border:1px solid var(--border); border-radius:7px; margin-bottom:0.6rem; opacity:0; transform:translateX(18px); transition:opacity 0.5s, transform 0.5s, border-color 0.2s; }
+    .cert-item.vis { opacity:1; transform:translateX(0); }
+    .cert-item:hover { border-color:var(--accent2); }
+    .cert-year { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--accent3); min-width:40px; }
+    .cert-name { font-size:0.85rem; line-height:1.4; color:var(--text); }
+
+    .social-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+    .social-card { padding:1.1rem; background:var(--surface); border:1px solid var(--border); border-radius:8px; text-decoration:none; color:var(--text); display:flex; align-items:center; gap:0.8rem; opacity:0; transform:translateY(14px); transition:opacity 0.5s, transform 0.5s, border-color 0.2s, box-shadow 0.2s; }
+    .social-card.vis { opacity:1; transform:translateY(0); }
+    .social-card:hover { border-color:var(--accent); box-shadow:0 4px 18px rgba(204,0,0,0.12); }
+    .social-icon { font-size:1.2rem; }
+    .social-name { font-size:0.84rem; font-weight:500; color:var(--white); }
+    .social-handle { font-size:0.72rem; color:var(--muted); }
+
+    @keyframes fadeLeft  { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes fadeRight { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+    footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:1.8rem 3rem; text-align:center; color:var(--muted); font-size:0.82rem; }
+    footer a { color:var(--accent2); text-decoration:none; }
+
+    @media(max-width:768px) { nav{padding:0 1.5rem;} .nav-links{gap:1rem;} .main{grid-template-columns:1fr; padding:6rem 1.5rem 3rem; gap:2.5rem;} }
+  </style>
+</head>
+<body>
+  <div class="glow-orb"></div>
+
+  <nav>
+  <div class="nav-left">
+    <img src="images/sivasspor.png" alt="Sivasspor Logo" class="sivasspor-logo">
+    <a class="nav-logo" href="index.html">MAD <span>·</span></a>
+  </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Ana Sayfa</a></li>
+      <li><a href="hakkimda.html">Hakkımda</a></li>
+      <li><a href="hobilerim.html">Hobilerim</a></li>
+      <li><a href="iletisim.html" class="active">İletişim</a></li>
+    </ul>
+  </nav>
+
+  <main class="main">
+    <div class="contact-left">
+      <div class="section-label">Ulaşın</div>
+      <h1>İletişim<span style="color:var(--accent)">e</span> Geçin</h1>
+      <p class="intro-text">Haritacılık, CBS veya arazi toplulaştırma konularında sorularınız ve iş birliği teklifleri için aşağıdaki kanallardan ulaşabilirsiniz.</p>
+
+      <div class="contact-items">
+
+        <!-- Current workplace highlighted -->
+        <div class="contact-item highlight">
+          <div class="ci-icon">🏛️</div>
+          <div>
+            <div class="ci-label">Mevcut İş Yeri <span class="badge-now">Şu An</span></div>
+            <div class="ci-value">T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı</div>
+            <div class="ci-sub">CBS Genel Müdürlüğü · CBS Uzmanı · Ankara</div>
+          </div>
+        </div>
+
+        <a href="tel:01111111111" class="contact-item">
+          <div class="ci-icon">📞</div>
+          <div>
+            <div class="ci-label">Telefon</div>
+            <div class="ci-value blurred">0111 111 11 11</div>
+          </div>
+        </a>
+
+        <a href="mailto:mehmedasim.deliser@csb.gov.tr" class="contact-item">
+          <div class="ci-icon">📧</div>
+          <div>
+            <div class="ci-label">Kurumsal E-Posta</div>
+            <div class="ci-value">mehmedasim.deliser@csb.gov.tr</div>
+          </div>
+        </a>
+
+        <a href="https://linkedin.com/in/mehmed-asım-deliser" target="_blank" class="contact-item">
+          <div class="ci-icon">💼</div>
+          <div>
+            <div class="ci-label">LinkedIn</div>
+            <div class="ci-value">linkedin.com/in/mehmed-asım-deliser</div>
+          </div>
+        </a>
+
+        <div class="contact-item" style="cursor:default;">
+          <div class="ci-icon">📍</div>
+          <div>
+            <div class="ci-label">Konum</div>
+            <div class="ci-value">Ankara, Türkiye</div>
+            <div class="ci-sub">2025'ten itibaren</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="contact-right">
+      <div class="cert-section">
+        <div class="section-label">Belgeler</div>
+        <h2 class="section-h">Sertifikalar</h2>
+        <div class="cert-item"><div class="cert-year">2021</div><div class="cert-name">İnsansız Hava Aracı Ehliyeti (İHA-1)</div></div>
+        <div class="cert-item"><div class="cert-year">2021</div><div class="cert-name">SRC-4 Belgesi</div></div>
+        <div class="cert-item"><div class="cert-year">2022</div><div class="cert-name">AutoCAD İki Boyutlu Teknik Çizim</div></div>
+        <div class="cert-item"><div class="cert-year">2022</div><div class="cert-name">Arazi Toplulaştırma Projelendirme Eğitimi</div></div>
+      </div>
+
+      <div>
+        <div class="section-label">Platformlar & Araçlar</div>
+        <h2 class="section-h">Sosyal & Yetkinlikler</h2>
+        <div class="social-grid">
+          <a href="https://linkedin.com/in/mehmed-asım-deliser" target="_blank" class="social-card">
+            <span class="social-icon">💼</span>
+            <div><div class="social-name">LinkedIn</div><div class="social-handle">Profili Gör ↗</div></div>
+          </a>
+          <div class="social-card" style="cursor:default;">
+            <span class="social-icon">🏛️</span>
+            <div><div class="social-name">ÇŞİDB</div><div class="social-handle">CBS GM · CBS Uzmanı</div></div>
+          </div>
+          <div class="social-card" style="cursor:default;">
+            <span class="social-icon">🌍</span>
+            <div><div class="social-name">QGIS / ArcGIS</div><div class="social-handle">CBS Yazılımları</div></div>
+          </div>
+          <div class="social-card" style="cursor:default;">
+            <span class="social-icon">🚁</span>
+            <div><div class="social-name">İHA Pilotu</div><div class="social-handle">İHA-1 Lisanslı</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Mehmed Asım Deliser · <a href="hakkimda.html">Hakkımda</a> · <a href="hobilerim.html">Hobilerim</a></p>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); }), {threshold:0.1});
+    document.querySelectorAll('.contact-item,.cert-item,.social-card').forEach((el,i) => {
+      el.style.transitionDelay = (i * 0.07) + 's';
+      obs.observe(el);
+    });
+  </script>
+</body>
+</html>
